@@ -42,6 +42,8 @@ export const GameController: React.FC<GameControllerProps> = ({
         const answerData = JSON.parse(event.content)
         const playerId = event.pubkey
         
+        console.log('Processing answer from player:', playerId, 'Answer data:', answerData)
+        
         // Submit answer to game engine
         const result = gameEngine.submitAnswer(
           playerId,
@@ -51,6 +53,7 @@ export const GameController: React.FC<GameControllerProps> = ({
         )
 
         if (result) {
+          console.log('Answer processed, publishing score update:', result)
           // Publish score update
           publishScoreUpdate()
         }
@@ -97,6 +100,7 @@ export const GameController: React.FC<GameControllerProps> = ({
       }
 
       await nostr.publishScoreUpdate(scoreData)
+      console.log('Score update published:', scoreData)
     } catch (err) {
       console.error('Failed to publish score update:', err)
     }

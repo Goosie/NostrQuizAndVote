@@ -62,6 +62,7 @@ export class GameEngine {
 
   // Add player to the game
   addPlayer(player: Player): void {
+    console.log('GameEngine: Adding player:', player.id, player.nickname)
     this.players.set(player.id, player)
     this.answers.set(player.id, [])
   }
@@ -84,9 +85,10 @@ export class GameEngine {
     answerIndex: number, 
     timeMs: number
   ): PlayerQuestionResult | null {
+    console.log('GameEngine: Submitting answer for player:', playerId, 'Available players:', Array.from(this.players.keys()))
     const player = this.players.get(playerId)
     if (!player) {
-      console.error('Player not found:', playerId)
+      console.error('Player not found:', playerId, 'Available players:', Array.from(this.players.keys()))
       return null
     }
 
@@ -127,6 +129,8 @@ export class GameEngine {
     const totalScore = playerAnswers.reduce((sum, answer) => sum + answer.points, 0)
     player.score = totalScore
     player.answers = playerAnswers
+    
+    console.log('GameEngine: Updated score for player:', player.nickname, 'Points earned:', points, 'Total score:', totalScore)
 
     // Create result
     const result: PlayerQuestionResult = {

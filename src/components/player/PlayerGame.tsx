@@ -30,7 +30,19 @@ export const PlayerGame: React.FC<PlayerGameProps> = ({ session, player, onLeave
     const scoreSubId = nostr.subscribeToScoreUpdates(session.id, (event) => {
       try {
         const scoreData = JSON.parse(event.content)
-        if (scoreData.player_id === player.id) {
+        // New format: scoreData.scores is an array of player scores
+        if (scoreData.scores && Array.isArray(scoreData.scores)) {
+          console.log('Received score update. Player ID:', player.id, 'Available scores:', scoreData.scores)
+          const playerScore = scoreData.scores.find((s: any) => s.player_id === player.id)
+          if (playerScore) {
+            setPlayerScore(playerScore.total_score)
+            console.log('Score updated for player:', player.nickname, 'New score:', playerScore.total_score)
+          } else {
+            console.log('No score found for player ID:', player.id)
+          }
+        }
+        // Fallback to old format for compatibility
+        else if (scoreData.player_id === player.id) {
           setPlayerScore(scoreData.total_score)
         }
       } catch (err) {
@@ -79,6 +91,7 @@ export const PlayerGame: React.FC<PlayerGameProps> = ({ session, player, onLeave
         time_ms: timeMs
       }
 
+      console.log('Submitting answer for player:', player.id, 'Answer data:', answerData)
       await nostr.publishAnswer(answerData)
       setGameState('answer-submitted')
       
