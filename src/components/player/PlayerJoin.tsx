@@ -62,17 +62,19 @@ export const PlayerJoin: React.FC<PlayerJoinProps> = ({ onJoinSuccess }) => {
         nostr.generateEphemeralIdentity()
       }
 
-      // Find the game session by PIN
-      const session = await findGameSessionByPin(pin.trim())
-      if (!session) {
+      // Find the game session by PIN using Nostr
+      const sessionResult = await nostr.findGameSessionByPin(pin.trim())
+      if (!sessionResult) {
         setError('Game not found. Please check the PIN.')
         return
       }
 
+      const { session, eventId } = sessionResult
+
       // Create player data
       const playerData = {
         session_id: session.id,
-        session_event_id: session.id, // This should be the actual event ID
+        session_event_id: eventId, // Use the actual Nostr event ID
         nickname: nickname.trim()
       }
 
@@ -100,21 +102,7 @@ export const PlayerJoin: React.FC<PlayerJoinProps> = ({ onJoinSuccess }) => {
     }
   }
 
-  // Find game session by PIN (this would normally query Nostr events)
-  const findGameSessionByPin = async (gamePin: string): Promise<GameSession | null> => {
-    // TODO: Implement actual Nostr query to find session by PIN
-    // For now, return a mock session
-    return {
-      id: `session_${gamePin}`,
-      quizId: 'quiz_1',
-      pin: gamePin,
-      hostPubkey: 'host_pubkey',
-      players: [],
-      currentQuestionIndex: 0,
-      status: 'waiting',
-      createdAt: new Date()
-    }
-  }
+
 
   return (
     <div className="player-join">

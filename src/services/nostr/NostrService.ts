@@ -342,6 +342,45 @@ export class NostrService {
     }, onScoreUpdate, `scores_${sessionEventId}`)
   }
 
+  // Find game session by PIN
+  async findGameSessionByPin(pin: string): Promise<{ session: any, eventId: string } | null> {
+    try {
+      const relays = this.getRelays()
+      const events = await this.pool.querySync(relays, {
+        kinds: [EVENT_KINDS.GAME_SESSION],
+        limit: 10
+      })
+
+      for (const event of events) {
+        try {
+          const sessionData = JSON.parse(event.content)
+          if (sessionData.pin === pin) {
+            return {
+              session: {
+                id: sessionData.session_id || `session_${event.id}`,
+                quizId: sessionData.quiz_id,
+                pin: sessionData.pin,
+                hostPubkey: event.pubkey,
+                players: [],
+                currentQuestionIndex: 0,
+                status: 'waiting' as const,
+                createdAt: new Date(event.created_at * 1000)
+              },
+              eventId: event.id
+            }
+          }
+        } catch (parseError) {
+          console.error('Failed to parse session event:', parseError, event)
+        }
+      }
+
+      return null
+    } catch (error) {
+      console.error('Failed to find game session by PIN:', error)
+      return null
+    }
+  }
+
   // Load user's published quizzes
   async loadUserQuizzes(userPubkey: string): Promise<Quiz[]> {
     try {

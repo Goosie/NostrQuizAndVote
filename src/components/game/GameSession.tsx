@@ -45,7 +45,7 @@ export const GameSession: React.FC<GameSessionProps> = ({ quiz, onBack }) => {
       }
 
       // Publish game session to Nostr
-      await nostr.publishGameSession(sessionData)
+      const sessionEvent = await nostr.publishGameSession(sessionData)
 
       const newSession: GameSessionType = {
         id: sessionId,
@@ -62,8 +62,8 @@ export const GameSession: React.FC<GameSessionProps> = ({ quiz, onBack }) => {
       setPin(newPin)
       setSessionState('lobby')
 
-      // Subscribe to player joins
-      subscribeToPlayerJoins(sessionId)
+      // Subscribe to player joins using the Nostr event ID
+      subscribeToPlayerJoins(sessionEvent.id)
 
     } catch (err) {
       console.error('Failed to create session:', err)
@@ -74,10 +74,10 @@ export const GameSession: React.FC<GameSessionProps> = ({ quiz, onBack }) => {
   }
 
   // Subscribe to player join events
-  const subscribeToPlayerJoins = (sessionId: string) => {
+  const subscribeToPlayerJoins = (eventId: string) => {
     if (!nostr) return
 
-    nostr.subscribeToPlayerJoins(sessionId, (event) => {
+    nostr.subscribeToPlayerJoins(eventId, (event) => {
       try {
         const playerData = JSON.parse(event.content)
         const newPlayer: Player = {
