@@ -10,10 +10,11 @@
     "build": "tsc && vite build",
     "preview": "vite preview",
     "predeploy": "npm run build",
-    "deploy": "node scripts/deploy.js pages",
-    "deploy:build": "node scripts/deploy.js build",
-    "deploy:release": "node scripts/deploy.js full",
-    "deploy:help": "node scripts/deploy.js help",
+    "deploy": "./scripts/deploy.sh pages",
+    "deploy:build": "./scripts/deploy.sh build",
+    "deploy:release": "./scripts/deploy.sh full",
+    "deploy:help": "./scripts/deploy.sh help",
+    "deploy:js": "node scripts/deploy.js pages",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
 
