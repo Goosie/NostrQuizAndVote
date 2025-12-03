@@ -57,18 +57,26 @@ export const PlayerJoin: React.FC<PlayerJoinProps> = ({ onJoinSuccess }) => {
     setError('')
 
     try {
+      console.log('Starting join process for PIN:', pin.trim())
+      
       // If not using Nostr login, generate ephemeral identity
       if (!useNostrLogin && !pubkey) {
+        console.log('Generating ephemeral identity for player')
         nostr.generateEphemeralIdentity()
       }
 
+      console.log('Player pubkey:', nostr.getPubkey())
+
       // Find the game session by PIN using Nostr
+      console.log('Searching for game session...')
       const sessionResult = await nostr.findGameSessionByPin(pin.trim())
       if (!sessionResult) {
-        setError('Game not found. Please check the PIN.')
+        console.log('No session found for PIN:', pin.trim())
+        setError('Game not found. Please check the PIN and make sure the host has created a session.')
         return
       }
 
+      console.log('Found session:', sessionResult)
       const { session, eventId } = sessionResult
 
       // Create player data
@@ -78,6 +86,8 @@ export const PlayerJoin: React.FC<PlayerJoinProps> = ({ onJoinSuccess }) => {
         nickname: nickname.trim()
       }
 
+      console.log('Publishing player join event:', playerData)
+      
       // Publish player join event
       await nostr.publishPlayerJoin(playerData)
 
@@ -96,7 +106,8 @@ export const PlayerJoin: React.FC<PlayerJoinProps> = ({ onJoinSuccess }) => {
 
     } catch (err) {
       console.error('Failed to join game:', err)
-      setError('Failed to join game. Please try again.')
+      const errorMessage = err instanceof Error ? err.message : 'Unknown error'
+      setError(`Failed to join game: ${errorMessage}. Please try again.`)
     } finally {
       setIsJoining(false)
     }

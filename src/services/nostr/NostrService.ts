@@ -345,16 +345,25 @@ export class NostrService {
   // Find game session by PIN
   async findGameSessionByPin(pin: string): Promise<{ session: any, eventId: string } | null> {
     try {
+      console.log('Searching for game session with PIN:', pin)
       const relays = this.getRelays()
+      console.log('Using relays:', relays)
+      
       const events = await this.pool.querySync(relays, {
         kinds: [EVENT_KINDS.GAME_SESSION],
-        limit: 10
+        limit: 50 // Increase limit to find more sessions
       })
 
+      console.log(`Found ${events.length} game session events`)
+      
       for (const event of events) {
         try {
+          console.log('Checking event:', event.id, 'content:', event.content)
           const sessionData = JSON.parse(event.content)
+          console.log('Session data:', sessionData)
+          
           if (sessionData.pin === pin) {
+            console.log('Found matching session!')
             return {
               session: {
                 id: sessionData.session_id || `session_${event.id}`,
@@ -374,6 +383,7 @@ export class NostrService {
         }
       }
 
+      console.log('No matching session found for PIN:', pin)
       return null
     } catch (error) {
       console.error('Failed to find game session by PIN:', error)
