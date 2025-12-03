@@ -10,7 +10,10 @@
     "build": "tsc && vite build",
     "preview": "vite preview",
     "predeploy": "npm run build",
-    "deploy": "gh-pages -d dist",
+    "deploy": "node scripts/deploy.js pages",
+    "deploy:build": "node scripts/deploy.js build",
+    "deploy:release": "node scripts/deploy.js full",
+    "deploy:help": "node scripts/deploy.js help",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
 
