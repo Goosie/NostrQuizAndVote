@@ -106,6 +106,11 @@ export class FormstrService {
    */
   async loadUserForms(userPublicKey: string, userSecretKey?: string): Promise<V1FormSpec[]> {
     try {
+      // In test mode, return mock forms
+      if (userPublicKey.startsWith('test_pubkey_')) {
+        return this.getMockForms()
+      }
+      
       const forms = await getPastUserForms<string[]>(userPublicKey, userSecretKey)
       const formSpecs: V1FormSpec[] = []
 
@@ -127,6 +132,49 @@ export class FormstrService {
       console.error('Failed to load user forms:', error)
       return []
     }
+  }
+
+  /**
+   * Get mock forms for testing
+   */
+  private getMockForms(): V1FormSpec[] {
+    return [
+      {
+        schemaVersion: '1.0',
+        name: 'Sample Quiz: JavaScript Basics',
+        settings: {
+          description: 'Test your knowledge of JavaScript fundamentals'
+        },
+        fields: [
+          {
+            questionId: 'q1',
+            question: 'What is the correct way to declare a variable in JavaScript?',
+            answerType: AnswerTypes.radioButton,
+            answerSettings: {
+              choices: [
+                { choiceId: 'a', label: 'var myVar = 5' },
+                { choiceId: 'b', label: 'variable myVar = 5' },
+                { choiceId: 'c', label: 'v myVar = 5' },
+                { choiceId: 'd', label: 'declare myVar = 5' }
+              ]
+            }
+          },
+          {
+            questionId: 'q2',
+            question: 'Which of the following is NOT a JavaScript data type?',
+            answerType: AnswerTypes.radioButton,
+            answerSettings: {
+              choices: [
+                { choiceId: 'a', label: 'String' },
+                { choiceId: 'b', label: 'Boolean' },
+                { choiceId: 'c', label: 'Float' },
+                { choiceId: 'd', label: 'Number' }
+              ]
+            }
+          }
+        ]
+      }
+    ]
   }
 
   /**

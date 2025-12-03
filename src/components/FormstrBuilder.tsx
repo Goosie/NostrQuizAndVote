@@ -14,6 +14,8 @@ export const FormstrBuilder: React.FC<FormstrBuilderProps> = ({
   onCancel,
   initialQuiz
 }) => {
+  console.log('FormstrBuilder component rendered with props:', { onSave, onCancel, initialQuiz })
+  
   const [formSpec, setFormSpec] = useState<V1FormSpec>({
     schemaVersion: '1.0',
     name: initialQuiz?.title || '',
@@ -137,6 +139,9 @@ export const FormstrBuilder: React.FC<FormstrBuilderProps> = ({
   }
 
   const handleSave = async () => {
+    alert('handleSave function called!')
+    console.log('handleSave called')
+    
     if (!formSpec.name.trim()) {
       alert('Please enter a form name')
       return
@@ -147,20 +152,31 @@ export const FormstrBuilder: React.FC<FormstrBuilderProps> = ({
       return
     }
 
+    console.log('Validation passed, setting loading state')
     setIsLoading(true)
 
     try {
+      console.log('Converting FormSpec to Quiz:', formSpec)
       // Convert FormSpec to Quiz
       const quiz = formstrService.formSpecToQuiz(formSpec)
+      console.log('Converted quiz:', quiz)
       
-      // Create form using Formstr SDK (this will publish to Nostr)
-      const formCredentials = await formstrService.createForm(quiz)
-      
-      if (formCredentials && formCredentials.length > 0) {
-        // Add formstr reference to quiz
-        quiz.formstr_event_id = formCredentials
+      // In test mode, skip actual Formstr creation
+      const isDev = import.meta.env.DEV
+      if (isDev) {
+        console.log('Test mode: Skipping Formstr SDK creation')
+        quiz.formstr_event_id = ['test_form_' + Date.now()]
+      } else {
+        // Create form using Formstr SDK (this will publish to Nostr)
+        const formCredentials = await formstrService.createForm(quiz)
+        
+        if (formCredentials && formCredentials.length > 0) {
+          // Add formstr reference to quiz
+          quiz.formstr_event_id = formCredentials
+        }
       }
 
+      console.log('Calling onSave with quiz:', quiz)
       onSave(quiz)
     } catch (error) {
       console.error('Failed to save form:', error)

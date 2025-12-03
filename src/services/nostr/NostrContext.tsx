@@ -25,7 +25,19 @@ export const NostrProvider = ({ children }: NostrProviderProps) => {
   const loginWithNIP07 = async () => {
     try {
       setError(null)
-      const pk = await nostr.loginWithNIP07()
+      
+      // Check if we're in development mode and allow test login
+      const isDev = import.meta.env.DEV
+      let pk: string
+      
+      if (isDev && !window.nostr) {
+        // Test mode - use a mock pubkey
+        pk = 'test_pubkey_' + Math.random().toString(36).substring(7)
+        console.log('Using test mode with mock pubkey:', pk)
+      } else {
+        pk = await nostr.loginWithNIP07()
+      }
+      
       setPubkey(pk)
       setIsConnected(true)
     } catch (err) {

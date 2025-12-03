@@ -49,9 +49,11 @@ const HostPage = () => {
   }
 
   const handleSaveQuiz = async (quiz: Quiz) => {
+    console.log('handleSaveQuiz called with quiz:', quiz)
     try {
       // Set the creator
       const completeQuiz = { ...quiz, createdBy: pubkey || '' }
+      console.log('Complete quiz:', completeQuiz)
       
       // Publish quiz to Nostr
       if (nostr) {
@@ -69,6 +71,7 @@ const HostPage = () => {
       // Add to local list
       setQuizzes(prev => [...prev, completeQuiz])
       setCurrentView('list')
+      console.log('Quiz saved successfully, returning to list view')
     } catch (err) {
       console.error('Failed to save quiz:', err)
       alert('Failed to save quiz. Please try again.')
