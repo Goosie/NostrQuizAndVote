@@ -1,13 +1,37 @@
 import { useState } from 'react'
+import { useNostr } from '../../services/nostr'
 
 const PlayerPage = () => {
   const [pin, setPin] = useState('')
   const [nickname, setNickname] = useState('')
+  const [isJoining, setIsJoining] = useState(false)
+  const { generateEphemeralIdentity, isConnected, pubkey } = useNostr()
 
-  const handleJoin = () => {
+  const handleJoin = async () => {
     if (pin && nickname) {
-      console.log('Joining game with PIN:', pin, 'as', nickname)
-      // TODO: Implement join logic
+      setIsJoining(true)
+      try {
+        // Generate ephemeral identity for player
+        if (!isConnected) {
+          generateEphemeralIdentity()
+        }
+        
+        console.log('Joining game with PIN:', pin, 'as', nickname)
+        console.log('Player pubkey:', pubkey)
+        
+        // TODO: Implement actual join logic with Nostr
+        // This would involve:
+        // 1. Finding the game session by PIN
+        // 2. Publishing a Player Join event
+        // 3. Subscribing to game events
+        
+        alert(`Joining game ${pin} as ${nickname}!\nPlayer ID: ${pubkey?.slice(0, 8)}...`)
+      } catch (error) {
+        console.error('Failed to join game:', error)
+        alert('Failed to join game. Please try again.')
+      } finally {
+        setIsJoining(false)
+      }
     }
   }
 
@@ -58,9 +82,9 @@ const PlayerPage = () => {
           <button 
             className="btn w-full"
             onClick={handleJoin}
-            disabled={!pin || !nickname}
+            disabled={!pin || !nickname || isJoining}
           >
-            Join Game
+            {isJoining ? 'Joining...' : 'Join Game'}
           </button>
         </div>
       </div>
