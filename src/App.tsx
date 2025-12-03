@@ -3,6 +3,7 @@ import { NostrProvider } from './services/nostr'
 import HostPage from './components/host/HostPage'
 import PlayerPage from './components/player/PlayerPage'
 
+// NostrQuizAndVote MVP - Complete application
 function App() {
   return (
     <NostrProvider>
