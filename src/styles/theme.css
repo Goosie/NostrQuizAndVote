@@ -778,6 +778,238 @@ body {
   margin: 0 auto;
 }
 
+/* Player Join Styles */
+.player-join {
+  max-width: 500px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.join-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.join-header h1 {
+  color: var(--primary-color);
+  margin-bottom: 0.5rem;
+}
+
+.join-form {
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 2rem;
+}
+
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+.pin-input {
+  font-size: 1.5rem;
+  text-align: center;
+  letter-spacing: 0.5rem;
+  font-family: 'Courier New', monospace;
+}
+
+.nostr-section {
+  margin: 1.5rem 0;
+  padding: 1rem;
+  background: var(--bg-secondary);
+  border-radius: 6px;
+}
+
+.nostr-option {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.nostr-connected {
+  color: var(--success-color);
+  font-weight: 500;
+}
+
+.join-info {
+  margin-top: 2rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border-color);
+  text-align: center;
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+}
+
+/* Player Game Styles */
+.player-game {
+  min-height: 100vh;
+  background: var(--bg-primary);
+}
+
+.game-header {
+  background: var(--card-bg);
+  border-bottom: 1px solid var(--border-color);
+  padding: 1rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.question-info {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.question-number {
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+.timer {
+  background: var(--warning-color);
+  color: white;
+  padding: 0.25rem 0.75rem;
+  border-radius: 20px;
+  font-weight: bold;
+  font-size: 1.1rem;
+}
+
+.score {
+  font-weight: bold;
+  color: var(--primary-color);
+}
+
+/* Waiting Screen */
+.waiting-screen {
+  max-width: 600px;
+  margin: 2rem auto;
+  padding: 2rem;
+  text-align: center;
+}
+
+.player-info {
+  margin-bottom: 2rem;
+}
+
+.waiting-message {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid var(--border-color);
+  border-top: 4px solid var(--primary-color);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Question Screen */
+.question-screen {
+  max-width: 800px;
+  margin: 2rem auto;
+  padding: 2rem;
+}
+
+.question-card {
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 2rem;
+  text-align: center;
+}
+
+.question-text {
+  color: var(--text-primary);
+  margin-bottom: 2rem;
+  font-size: 1.5rem;
+  line-height: 1.4;
+}
+
+.answers-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.answer-option {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 1.5rem;
+  background: var(--bg-secondary);
+  border: 2px solid var(--border-color);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-align: left;
+}
+
+.answer-option:hover {
+  border-color: var(--primary-color);
+  transform: translateY(-2px);
+}
+
+.answer-option.selected {
+  background: var(--primary-color);
+  color: white;
+  border-color: var(--primary-color);
+}
+
+.answer-option:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.option-letter {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: var(--text-primary);
+  color: var(--bg-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  flex-shrink: 0;
+}
+
+.answer-option.selected .option-letter {
+  background: white;
+  color: var(--primary-color);
+}
+
+.option-text {
+  font-size: 1.1rem;
+  flex: 1;
+}
+
+/* Submitted Screen */
+.submitted-screen {
+  max-width: 600px;
+  margin: 2rem auto;
+  padding: 2rem;
+  text-align: center;
+}
+
 /* Responsive */
 @media (max-width: 768px) {
   .lobby {
@@ -798,8 +1030,46 @@ body {
   }
   
   .pin-display {
-    font-size: 3rem;
-    letter-spacing: 4px;
+    padding: 1rem;
+  }
+  
+  .player-join {
+    padding: 1rem;
+  }
+  
+  .join-form {
+    padding: 1.5rem;
+  }
+  
+  .question-screen {
+    padding: 1rem;
+  }
+  
+  .question-card {
+    padding: 1.5rem;
+  }
+  
+  .question-text {
+    font-size: 1.2rem;
+  }
+  
+  .answer-option {
+    padding: 0.75rem 1rem;
+  }
+  
+  .option-text {
+    font-size: 1rem;
+  }
+  
+  .game-header {
+    padding: 1rem;
+    flex-direction: column;
+    gap: 1rem;
+    text-align: center;
+  }
+  
+  .question-info {
+    justify-content: center;
   }
   
   .container {
