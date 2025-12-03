@@ -4,7 +4,6 @@
   "description": "Kahoot-style live quizzes & votes on Nostr, powered by Formstr",
   "homepage": "https://goosie.github.io/NostrQuizAndVote",
   "type": "module",
-
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
@@ -18,7 +17,6 @@
     "deploy:gh-pages": "gh-pages -d dist",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-
   "keywords": [
     "nostr",
     "quiz",
@@ -26,10 +24,8 @@
     "formstr",
     "kahoot"
   ],
-
   "author": "NostrQuizAndVote",
   "license": "MIT",
-
   "devDependencies": {
     "@types/react": "^19.2.7",
     "@types/react-dom": "^19.2.3",
@@ -38,8 +34,8 @@
     "typescript": "^5.9.3",
     "vite": "^6.4.1"
   },
-
   "dependencies": {
+    "@formstr/sdk": "^0.0.4-alpha",
     "nostr-tools": "^2.18.2",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",

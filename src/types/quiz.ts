@@ -6,9 +6,10 @@ export interface Quiz {
   description: string;
   language?: string;       // ISO code, e.g. "en", "nl"
   questions: Question[];
-  settings: QuizSettings;
-  createdAt: Date;
+  settings?: QuizSettings;
+  createdAt: string;
   createdBy: string;       // pubkey of creator
+  formstr_event_id?: string | string[]; // Optional Formstr form ID reference
 }
 
 export interface Question {

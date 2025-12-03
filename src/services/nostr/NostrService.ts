@@ -17,14 +17,14 @@ interface Filter {
 }
 import { EVENT_KINDS } from '../../types/nostr'
 
-// NIP-07 interface
+// NIP-07 interface - extending the one from @formstr/sdk
 declare global {
   interface Window {
-    nostr?: {
+    nostr: {
       getPublicKey(): Promise<string>
       signEvent(event: any): Promise<Event>
       getRelays?(): Promise<Record<string, { read: boolean; write: boolean }>>
-      nip04?: {
+      nip04: {
         encrypt(pubkey: string, plaintext: string): Promise<string>
         decrypt(pubkey: string, ciphertext: string): Promise<string>
       }

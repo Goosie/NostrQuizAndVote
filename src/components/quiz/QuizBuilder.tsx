@@ -95,7 +95,7 @@ export const QuizBuilder: React.FC<QuizBuilderProps> = ({ onSave, onCancel }) =>
         description: quiz.description || '',
         questions: quiz.questions,
         settings: quiz.settings!,
-        createdAt: new Date(),
+        createdAt: new Date().toISOString(),
         createdBy: '' // Will be set by the parent component
       }
       onSave(completeQuiz)

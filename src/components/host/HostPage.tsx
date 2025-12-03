@@ -1,10 +1,12 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useNostr } from '../../services/nostr'
 import { QuizBuilder, QuizList } from '../quiz'
+import { FormstrBuilder } from '../FormstrBuilder'
 import { GameSession } from '../game/GameSession'
 import { Quiz } from '../../types'
+import { formstrService } from '../../services/formstr'
 
-type HostView = 'list' | 'create' | 'session'
+type HostView = 'list' | 'create' | 'formstr' | 'session'
 
 const HostPage = () => {
   const { nostr, isConnected, pubkey, error, loginWithNIP07 } = useNostr()
@@ -12,6 +14,28 @@ const HostPage = () => {
   const [currentView, setCurrentView] = useState<HostView>('list')
   const [quizzes, setQuizzes] = useState<Quiz[]>([])
   const [selectedQuiz, setSelectedQuiz] = useState<Quiz | null>(null)
+
+  // Load Formstr forms when connected
+  useEffect(() => {
+    const loadFormstrForms = async () => {
+      if (isConnected && pubkey) {
+        try {
+          const forms = await formstrService.loadUserForms(pubkey)
+          const formQuizzes = forms.map(form => formstrService.formSpecToQuiz(form))
+          setQuizzes(prev => {
+            // Merge with existing quizzes, avoiding duplicates
+            const existingIds = prev.map(q => q.id)
+            const newQuizzes = formQuizzes.filter(q => !existingIds.includes(q.id))
+            return [...prev, ...newQuizzes]
+          })
+        } catch (error) {
+          console.error('Failed to load Formstr forms:', error)
+        }
+      }
+    }
+
+    loadFormstrForms()
+  }, [isConnected, pubkey])
 
   const handleConnect = async () => {
     setIsConnecting(true)
@@ -104,12 +128,20 @@ const HostPage = () => {
           quizzes={quizzes}
           onSelectQuiz={handleSelectQuiz}
           onCreateNew={() => setCurrentView('create')}
+          onCreateWithFormstr={() => setCurrentView('formstr')}
           onDeleteQuiz={handleDeleteQuiz}
         />
       )}
       
       {currentView === 'create' && (
         <QuizBuilder
+          onSave={handleSaveQuiz}
+          onCancel={() => setCurrentView('list')}
+        />
+      )}
+      
+      {currentView === 'formstr' && (
+        <FormstrBuilder
           onSave={handleSaveQuiz}
           onCancel={() => setCurrentView('list')}
         />

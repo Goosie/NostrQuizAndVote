@@ -37,10 +37,10 @@ export const GameSession: React.FC<GameSessionProps> = ({ quiz, onBack }) => {
         pin: newPin,
         session_id: sessionId,
         settings: {
-          time_per_question: quiz.settings.timePerQuestion,
-          quiz_type: quiz.settings.requireDeposit ? 'deposit' as const : 'free' as const,
-          deposit_sats: quiz.settings.requireDeposit ? quiz.settings.depositAmount : undefined,
-          payout_per_correct: quiz.settings.requireDeposit ? Math.floor(quiz.settings.depositAmount * 0.8 / quiz.questions.length) : undefined
+          time_per_question: quiz.settings?.timePerQuestion || 30,
+          quiz_type: quiz.settings?.requireDeposit ? 'deposit' as const : 'free' as const,
+          deposit_sats: quiz.settings?.requireDeposit ? quiz.settings.depositAmount : undefined,
+          payout_per_correct: quiz.settings?.requireDeposit ? Math.floor((quiz.settings.depositAmount || 0) * 0.8 / quiz.questions.length) : undefined
         }
       }
 
@@ -147,10 +147,10 @@ export const GameSession: React.FC<GameSessionProps> = ({ quiz, onBack }) => {
                 <span className="stat-label">Questions</span>
               </div>
               <div className="stat">
-                <span className="stat-value">{quiz.settings.timePerQuestion}s</span>
+                <span className="stat-value">{quiz.settings?.timePerQuestion || 30}s</span>
                 <span className="stat-label">Per Question</span>
               </div>
-              {quiz.settings.requireDeposit && (
+              {quiz.settings?.requireDeposit && (
                 <div className="stat">
                   <span className="stat-value">{quiz.settings.depositAmount}</span>
                   <span className="stat-label">Sats Deposit</span>

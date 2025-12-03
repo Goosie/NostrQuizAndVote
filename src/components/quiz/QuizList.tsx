@@ -5,6 +5,7 @@ interface QuizListProps {
   quizzes: Quiz[]
   onSelectQuiz: (quiz: Quiz) => void
   onCreateNew: () => void
+  onCreateWithFormstr?: () => void
   onDeleteQuiz?: (quizId: string) => void
 }
 
@@ -12,24 +13,39 @@ export const QuizList: React.FC<QuizListProps> = ({
   quizzes, 
   onSelectQuiz, 
   onCreateNew, 
+  onCreateWithFormstr,
   onDeleteQuiz 
 }) => {
   return (
     <div className="quiz-list">
       <div className="quiz-list-header">
         <h2>Your Quizzes</h2>
-        <button className="btn btn-primary" onClick={onCreateNew}>
-          Create New Quiz
-        </button>
+        <div className="quiz-list-actions">
+          <button className="btn btn-primary" onClick={onCreateNew}>
+            Create New Quiz
+          </button>
+          {onCreateWithFormstr && (
+            <button className="btn btn-secondary" onClick={onCreateWithFormstr}>
+              Create with Formstr
+            </button>
+          )}
+        </div>
       </div>
 
       {quizzes.length === 0 ? (
         <div className="empty-state">
           <h3>No quizzes yet</h3>
           <p>Create your first quiz to get started with hosting live quiz sessions!</p>
-          <button className="btn btn-primary" onClick={onCreateNew}>
-            Create Your First Quiz
-          </button>
+          <div className="empty-state-actions">
+            <button className="btn btn-primary" onClick={onCreateNew}>
+              Create Your First Quiz
+            </button>
+            {onCreateWithFormstr && (
+              <button className="btn btn-secondary" onClick={onCreateWithFormstr}>
+                Create with Formstr
+              </button>
+            )}
+          </div>
         </div>
       ) : (
         <div className="quiz-grid">
@@ -61,10 +77,10 @@ export const QuizList: React.FC<QuizListProps> = ({
                   <span className="stat-label">Questions</span>
                 </div>
                 <div className="stat">
-                  <span className="stat-value">{quiz.settings.timePerQuestion}s</span>
+                  <span className="stat-value">{quiz.settings?.timePerQuestion || 30}s</span>
                   <span className="stat-label">Per Question</span>
                 </div>
-                {quiz.settings.requireDeposit && (
+                {quiz.settings?.requireDeposit && (
                   <div className="stat">
                     <span className="stat-value">{quiz.settings.depositAmount}</span>
                     <span className="stat-label">Sats Deposit</span>
