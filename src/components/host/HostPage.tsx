@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useNostr } from '../../services/nostr'
 import { QuizBuilder, QuizList } from '../quiz'
+import { GameSession } from '../game/GameSession'
 import { Quiz } from '../../types'
 
 type HostView = 'list' | 'create' | 'session'
@@ -115,22 +116,10 @@ const HostPage = () => {
       )}
       
       {currentView === 'session' && selectedQuiz && (
-        <div className="game-session">
-          <div className="session-header">
-            <h2>Game Session: {selectedQuiz.title}</h2>
-            <button 
-              className="btn btn-secondary"
-              onClick={() => setCurrentView('list')}
-            >
-              Back to Quizzes
-            </button>
-          </div>
-          <div className="card">
-            <p>Game session management coming soon...</p>
-            <p>Selected quiz: <strong>{selectedQuiz.title}</strong></p>
-            <p>Questions: {selectedQuiz.questions.length}</p>
-          </div>
-        </div>
+        <GameSession
+          quiz={selectedQuiz}
+          onBack={() => setCurrentView('list')}
+        />
       )}
     </div>
   )

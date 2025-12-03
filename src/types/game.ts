@@ -1,14 +1,14 @@
-import { Quiz } from './quiz';
 import { PlayerScore } from './nostr';
 
 export interface GameSession {
   id: string;
-  quiz: Quiz;
+  quizId: string;
   pin: string;
   hostPubkey: string;
   players: Player[];
   currentQuestionIndex: number;
   status: GameStatus;
+  createdAt: Date;
   startedAt?: Date;
   endedAt?: Date;
 }
@@ -16,9 +16,9 @@ export interface GameSession {
 export interface Player {
   id: string;
   nickname: string;
-  pubkey?: string;
+  pubkey?: string | null;
   joinedAt: Date;
-  totalScore: number;
+  score: number;
   answers: PlayerAnswer[];
 }
 
@@ -31,10 +31,8 @@ export interface PlayerAnswer {
 }
 
 export type GameStatus = 
-  | "lobby"      // waiting for players to join
-  | "starting"   // host clicked start, transitioning
-  | "question"   // showing a question
-  | "reveal"     // showing answer/scores for current question
+  | "waiting"    // waiting for players to join
+  | "active"     // game is active
   | "finished";  // game completed
 
 export interface GameState {

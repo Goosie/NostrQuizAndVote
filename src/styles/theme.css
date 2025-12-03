@@ -621,8 +621,182 @@ body {
   color: var(--primary-color);
 }
 
+/* Session setup styles */
+.session-setup {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.quiz-info {
+  text-align: center;
+}
+
+.quiz-info h3 {
+  margin: 0 0 1rem 0;
+  color: var(--primary-color);
+}
+
+.session-actions {
+  text-align: center;
+}
+
+.btn-large {
+  font-size: 1.2rem;
+  padding: 1rem 2rem;
+}
+
+/* Lobby styles */
+.lobby {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.lobby-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.pin-display {
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 2rem;
+  text-align: center;
+}
+
+.pin-display h3 {
+  margin: 0 0 1rem 0;
+  color: var(--text-primary);
+}
+
+.pin-code {
+  font-size: 3rem;
+  font-weight: bold;
+  color: var(--primary-color);
+  letter-spacing: 0.5rem;
+  margin: 1rem 0;
+  font-family: 'Courier New', monospace;
+}
+
+.qr-section {
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 1.5rem;
+  text-align: center;
+}
+
+.qr-placeholder {
+  background: var(--bg-secondary);
+  border: 2px dashed var(--border-color);
+  border-radius: 6px;
+  padding: 2rem;
+  color: var(--text-secondary);
+}
+
+/* Players section */
+.players-section {
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 1.5rem;
+}
+
+.players-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.players-header h3 {
+  margin: 0;
+  color: var(--text-primary);
+}
+
+.players-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 1rem;
+}
+
+.player-card {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  padding: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  transition: transform 0.2s;
+}
+
+.player-card:hover {
+  transform: translateY(-2px);
+}
+
+.player-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--primary-color);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 1.2rem;
+}
+
+.player-info {
+  flex: 1;
+}
+
+.player-name {
+  font-weight: 500;
+  color: var(--text-primary);
+  margin-bottom: 0.25rem;
+}
+
+.player-status {
+  font-size: 0.8rem;
+  color: var(--success-color);
+}
+
+/* Game playing styles */
+.game-playing {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
 /* Responsive */
 @media (max-width: 768px) {
+  .lobby {
+    grid-template-columns: 1fr;
+  }
+  
+  .pin-code {
+    font-size: 2rem;
+    letter-spacing: 0.25rem;
+  }
+  
+  .players-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .session-setup {
+    padding: 1rem;
+  }
+  
   .pin-display {
     font-size: 3rem;
     letter-spacing: 4px;
