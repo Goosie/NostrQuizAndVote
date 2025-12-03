@@ -15,7 +15,19 @@ Your task is to read and fully understand all documents in this repository and t
 - `BUGS.md`
     
 - `README.md`
+-  https://github.com/Goosie/NostrQuizAndVote/tree/main/StartPrompts
+- https://github.com/Goosie/NostrQuizAndVote/blob/main/StartPrompts/01_%20StartPrompt.md
+- https://github.com/Goosie/NostrQuizAndVote/blob/main/StartPrompts/02%20_Prompt%20Toolbox.md
+-  https://github.com/Goosie/NostrQuizAndVote/blob/main/StartPrompts/03_ArchitectureAgent%20prompt.md
+- https://github.com/Goosie/NostrQuizAndVote/blob/main/StartPrompts/04_UIAgent%20prompt.md
+-  https://github.com/Goosie/NostrQuizAndVote/blob/main/StartPrompts/05_NostrAgent%20prompt.md
+- https://github.com/Goosie/NostrQuizAndVote/blob/main/StartPrompts/06_GameLogic%20prompt.md
+- https://github.com/Goosie/NostrQuizAndVote/blob/main/StartPrompts/07_FormstrAgent%20prompt.md
+- https://github.com/Goosie/NostrQuizAndVote/blob/main/StartPrompts/CICDAgent%20prompt.md
     
+
+
+
 
 ---
 
@@ -29,7 +41,7 @@ The MVP includes:
 
 - Nostr login via NIP-07
     
-- Embedded Formstr module (from nostr-forms)
+- Show Embedded Formstr module (from nostr-forms) Create quiz of voting form, define in the form of it's a deposit form (where users have to depost zaps before it can start.)
     
 - Quiz loading and mapping to internal Quiz model
     
@@ -44,7 +56,9 @@ The MVP includes:
 
 ### Player Flow
 
-- Join via PIN or QR
+- Join via PIN or QR placed on startboard of the lobby
+-
+- Deposit zaps when requested 
     
 - Nickname + optional Nostr login
     
