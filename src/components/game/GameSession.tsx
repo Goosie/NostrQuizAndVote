@@ -124,7 +124,7 @@ export const GameSession: React.FC<GameSessionProps> = ({ quiz, onBack }) => {
 
   // Generate QR code URL (for now just the join URL)
   const getJoinUrl = () => {
-    return `${window.location.origin}/join?pin=${pin}`
+    return `${window.location.origin}/NostrQuizAndVote/join?pin=${pin}`
   }
 
   if (sessionState === 'setup') {
@@ -188,7 +188,7 @@ export const GameSession: React.FC<GameSessionProps> = ({ quiz, onBack }) => {
             <div className="pin-display">
               <h3>Game PIN</h3>
               <div className="pin-code">{pin}</div>
-              <p>Players can join at: <strong>{window.location.origin}/join</strong></p>
+              <p>Players can join at: <strong>{window.location.origin}/NostrQuizAndVote/join</strong></p>
             </div>
 
             <div className="qr-section">
