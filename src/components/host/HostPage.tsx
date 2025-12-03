@@ -15,27 +15,64 @@ const HostPage = () => {
   const [quizzes, setQuizzes] = useState<Quiz[]>([])
   const [selectedQuiz, setSelectedQuiz] = useState<Quiz | null>(null)
 
-  // Load Formstr forms when connected
+  // Load quizzes from localStorage on mount
   useEffect(() => {
-    const loadFormstrForms = async () => {
+    const loadLocalQuizzes = () => {
+      try {
+        const savedQuizzes = localStorage.getItem('nostr-quiz-saved-quizzes')
+        if (savedQuizzes) {
+          const parsedQuizzes = JSON.parse(savedQuizzes) as Quiz[]
+          console.log('Loaded quizzes from localStorage:', parsedQuizzes)
+          setQuizzes(parsedQuizzes)
+        }
+      } catch (error) {
+        console.error('Failed to load quizzes from localStorage:', error)
+      }
+    }
+
+    loadLocalQuizzes()
+  }, [])
+
+  // Load Formstr forms and Nostr quizzes when connected
+  useEffect(() => {
+    const loadRemoteQuizzes = async () => {
       if (isConnected && pubkey) {
         try {
+          // Load Formstr forms
           const forms = await formstrService.loadUserForms(pubkey)
           const formQuizzes = forms.map(form => formstrService.formSpecToQuiz(form))
+          
+          // Load user's published quizzes from Nostr
+          let nostrQuizzes: Quiz[] = []
+          if (nostr) {
+            try {
+              nostrQuizzes = await nostr.loadUserQuizzes(pubkey)
+              console.log('Loaded quizzes from Nostr:', nostrQuizzes)
+            } catch (error) {
+              console.error('Failed to load Nostr quizzes:', error)
+            }
+          }
+
+          // Merge all quizzes, avoiding duplicates
+          const allRemoteQuizzes = [...formQuizzes, ...nostrQuizzes]
           setQuizzes(prev => {
-            // Merge with existing quizzes, avoiding duplicates
             const existingIds = prev.map(q => q.id)
-            const newQuizzes = formQuizzes.filter(q => !existingIds.includes(q.id))
-            return [...prev, ...newQuizzes]
+            const newQuizzes = allRemoteQuizzes.filter(q => !existingIds.includes(q.id))
+            const updatedQuizzes = [...prev, ...newQuizzes]
+            
+            // Save to localStorage
+            localStorage.setItem('nostr-quiz-saved-quizzes', JSON.stringify(updatedQuizzes))
+            
+            return updatedQuizzes
           })
         } catch (error) {
-          console.error('Failed to load Formstr forms:', error)
+          console.error('Failed to load remote quizzes:', error)
         }
       }
     }
 
-    loadFormstrForms()
-  }, [isConnected, pubkey])
+    loadRemoteQuizzes()
+  }, [isConnected, pubkey, nostr])
 
   const handleConnect = async () => {
     setIsConnecting(true)
@@ -68,8 +105,14 @@ const HostPage = () => {
         console.log('Quiz published to Nostr:', completeQuiz.id)
       }
       
-      // Add to local list
-      setQuizzes(prev => [...prev, completeQuiz])
+      // Add to local list and save to localStorage
+      setQuizzes(prev => {
+        const updatedQuizzes = [...prev, completeQuiz]
+        // Save to localStorage for persistence
+        localStorage.setItem('nostr-quiz-saved-quizzes', JSON.stringify(updatedQuizzes))
+        return updatedQuizzes
+      })
+      
       setCurrentView('list')
       console.log('Quiz saved successfully, returning to list view')
     } catch (err) {

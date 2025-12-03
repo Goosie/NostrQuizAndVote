@@ -5,6 +5,7 @@ import {
   generateSecretKey, 
   getPublicKey
 } from 'nostr-tools'
+import { Quiz } from '../../types'
 
 interface Filter {
   ids?: string[]
@@ -339,6 +340,54 @@ export class NostrService {
       kinds: [EVENT_KINDS.SCORE_UPDATE],
       '#e': [sessionEventId]
     }, onScoreUpdate, `scores_${sessionEventId}`)
+  }
+
+  // Load user's published quizzes
+  async loadUserQuizzes(userPubkey: string): Promise<Quiz[]> {
+    try {
+      const relays = this.getRelays()
+      const events = await this.pool.querySync(relays, {
+        kinds: [EVENT_KINDS.QUIZ_DEFINITION],
+        authors: [userPubkey],
+        limit: 50
+      })
+
+      const quizzes: Quiz[] = []
+      
+      for (const event of events) {
+        try {
+          const quizData = JSON.parse(event.content)
+          
+          // Convert Nostr event to Quiz format
+          const quiz: Quiz = {
+            id: quizData.quiz_id || `quiz_${event.id}`,
+            title: quizData.title || 'Untitled Quiz',
+            description: quizData.description || '',
+            language: quizData.language || 'en',
+            questions: [], // Questions would need to be loaded separately or stored in content
+            settings: {
+              timePerQuestion: 30,
+              showCorrectAnswer: true,
+              allowMultipleAttempts: false,
+              requireDeposit: false,
+              depositAmount: 0
+            },
+            createdBy: userPubkey,
+            createdAt: new Date(event.created_at * 1000).toISOString(),
+            nostr_event_id: event.id
+          }
+          
+          quizzes.push(quiz)
+        } catch (parseError) {
+          console.error('Failed to parse quiz event:', parseError, event)
+        }
+      }
+
+      return quizzes
+    } catch (error) {
+      console.error('Failed to load user quizzes from Nostr:', error)
+      return []
+    }
   }
 
   // Cleanup

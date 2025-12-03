@@ -10,6 +10,7 @@ export interface Quiz {
   createdAt: string;
   createdBy: string;       // pubkey of creator
   formstr_event_id?: string | string[]; // Optional Formstr form ID reference
+  nostr_event_id?: string; // Optional Nostr event ID reference
 }
 
 export interface Question {
