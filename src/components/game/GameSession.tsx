@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { useNostr } from '../../services/nostr'
+import { GameController } from './GameController'
 import { Quiz, GameSession as GameSessionType, Player } from '../../types'
 
 interface GameSessionProps {
@@ -240,24 +241,15 @@ export const GameSession: React.FC<GameSessionProps> = ({ quiz, onBack }) => {
     )
   }
 
-  if (sessionState === 'playing') {
+  if (sessionState === 'playing' && session) {
     return (
       <div className="game-session">
-        <div className="session-header">
-          <h2>Game in Progress</h2>
-          <button className="btn btn-secondary" onClick={onBack}>
-            End Game
-          </button>
-        </div>
-
-        <div className="game-playing">
-          <div className="card">
-            <h3>Game Started!</h3>
-            <p>Players: {players.length}</p>
-            <p>Current Question: {(session?.currentQuestionIndex || 0) + 1} of {quiz.questions.length}</p>
-            <p>Game control interface coming soon...</p>
-          </div>
-        </div>
+        <GameController
+          quiz={quiz}
+          session={session}
+          players={players}
+          onGameEnd={onBack}
+        />
       </div>
     )
   }
