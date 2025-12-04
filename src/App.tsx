@@ -12,6 +12,7 @@ function App() {
           <Route path="/host" element={<HostPage />} />
           <Route path="/join" element={<PlayerPage />} />
           <Route path="/" element={<Navigate to="/host" replace />} />
+          <Route path="*" element={<Navigate to="/host" replace />} />
         </Routes>
       </div>
     </NostrProvider>

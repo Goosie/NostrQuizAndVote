@@ -105,7 +105,14 @@ export const PlayerJoin: React.FC<PlayerJoinProps> = ({ onJoinSuccess }) => {
       onJoinSuccess(session, player)
 
     } catch (err) {
-      console.error('Failed to join game:', err)
+      console.error('❌ PLAYER JOIN ERROR:', err)
+      console.error('❌ Error details:', {
+        message: err instanceof Error ? err.message : 'Unknown error',
+        stack: err instanceof Error ? err.stack : 'No stack trace',
+        pin: pin.trim(),
+        nickname: nickname.trim(),
+        useNostrLogin
+      })
       const errorMessage = err instanceof Error ? err.message : 'Unknown error'
       setError(`Failed to join game: ${errorMessage}. Please try again.`)
     } finally {
